@@ -1,13 +1,10 @@
-input =
-  File.read("input.day3")
-    .lines
-    .map(&.chars)
-
 def common_priority(*chars)
   chars.reduce { |acc, el| acc & el }.sum do |char|
     char.in?('a'..'z') ? char - 'a' + 1 : char - 'A' + 27
   end
 end
+
+input = File.read_lines("input.day3").map(&.chars)
 
 compartments = input.map { |chars|
   {chars[0..(chars.size//2 - 1)], chars[(chars.size//2)..]}
