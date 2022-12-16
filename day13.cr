@@ -13,6 +13,16 @@ struct Packet
     @entries << value
   end
 
+  def <=>(other : Int32)
+    if entries.size > 0
+      v = entries.first <=> other
+      return v if v != 0
+      entries.size > 1 ? 1 : 0
+    else
+      return -1
+    end
+  end
+
   def <=>(other)
     entries.each_with_index do |e, i|
       o = other.is_a?(Packet) ? other.entries[i]? : other
@@ -23,9 +33,9 @@ struct Packet
           elsif e.is_a?(Packet) && o.is_a?(Packet)
             e <=> o
           elsif e.is_a?(Packet)
-            e <=> Packet.new(o.as(Int32))
+            e <=> o.as(Int32)
           elsif o.is_a?(Packet)
-            Packet.new(e.as(Int32)) <=> o
+            -(o <=> e.as(Int32))
           else
             raise "unreachable"
           end
